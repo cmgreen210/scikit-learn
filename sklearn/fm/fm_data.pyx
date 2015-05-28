@@ -27,10 +27,10 @@ cdef class VectorDouble:
     cpdef length(self):
         return self._thisptr.dim
 
-    def get(self, unsigned int x):
-        if x > (self.length() - 1):
+    def __getitem__(self, unsigned int idx):
+        if idx > (self.length() - 1):
             raise IndexError("Index out of range!")
-        return self._thisptr.get(x)
+        return self._thisptr.get(idx)
 
 cdef class MatrixDouble:
     cdef DMatrixDouble *_thisptr
@@ -58,7 +58,8 @@ cdef class MatrixDouble:
         if self._thisptr != NULL:
             del self._thisptr
 
-    def get(self, unsigned int x, unsigned int y):
+    def __getitem__(self, tup):
+        x, y = tup
         cdef int dim1 = self._thisptr.dim1
         cdef int dim2 = self._thisptr.dim2
         if x >= dim1 or y >= dim2:
